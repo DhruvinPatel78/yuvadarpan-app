@@ -10,6 +10,29 @@ const UserSchema = new mongoose.Schema({
     maxLength: 20,
     trim: true,
   },
+  middleName: {
+    type: String,
+    maxLength: 20,
+    trim: true,
+    default: "middleName",
+  },
+  lastName: {
+    type: String,
+    maxLength: 20,
+    trim: true,
+    default: "lastName",
+  },
+  mobile: {
+    type: String,
+    required: [true, "Please provide Mobile Number"],
+    trim: true,
+    match: /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+  },
+  dob: {
+    type: Date,
+    required: [true, "Please provide Date of Birth"],
+    trim: true,
+  },
   email: {
     type: String,
     required: [true, "Please provide email"],
@@ -18,6 +41,7 @@ const UserSchema = new mongoose.Schema({
       message: "Please provide a valid email",
     },
     unique: true,
+    trim: true,
   },
   password: {
     type: String,
@@ -25,17 +49,42 @@ const UserSchema = new mongoose.Schema({
     minLength: 6,
     select: false,
   },
-  lastName: {
+  familyId: {
     type: String,
+    required: [true, "Please provide Family Id"],
     maxLength: 20,
     trim: true,
     default: "lastName",
   },
-  location: {
+  city: {
     type: String,
     maxLength: 20,
     trim: true,
     default: "my city",
+  },
+  state: {
+    type: String,
+    maxLength: 20,
+    trim: true,
+    default: "my state",
+  },
+  district: {
+    type: String,
+    maxLength: 20,
+    trim: true,
+    default: "my district",
+  },
+  region: {
+    type: String,
+    maxLength: 20,
+    trim: true,
+    default: "my district",
+  },
+  localSamaj: {
+    type: String,
+    maxLength: 20,
+    trim: true,
+    default: "my district",
   },
 });
 
@@ -44,9 +93,13 @@ UserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 UserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this.id }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
+};
+
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 export default mongoose.model("User", UserSchema);

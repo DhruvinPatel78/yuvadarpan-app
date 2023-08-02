@@ -1,4 +1,5 @@
 import "express-async-errors";
+// import cors from "cors";
 import express from "express";
 
 const app = express();
@@ -11,12 +12,16 @@ import notFoundMiddleware from "./middleware/not-found.js";
 
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import connectDB from "./db/connect.js";
-
+// app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
   // throw new Error("error")
-  res.send("Welcome!");
+  res.json({ msg: "Welcome!" });
+});
+app.get("/api/v1", (req, res) => {
+  // throw new Error("error")
+  res.json({ msg: "API!" });
 });
 
 app.use("/api/v1/auth", authRouter);

@@ -26,12 +26,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide Mobile Number"],
     trim: true,
-    match: /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+    match: /^(\+\d{1,3}[- ]?)?\d{10}$/,
   },
   dob: {
     type: Date,
     required: [true, "Please provide Date of Birth"],
     trim: true,
+    default: Date.now(),
   },
   email: {
     type: String,
@@ -78,13 +79,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     maxLength: 20,
     trim: true,
-    default: "my district",
+    default: "my region",
   },
   localSamaj: {
     type: String,
     maxLength: 20,
     trim: true,
-    default: "my district",
+    default: "my local samaj",
   },
 });
 

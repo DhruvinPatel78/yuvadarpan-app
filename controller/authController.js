@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
-import { BedRequestError, UnAuthenticatedError } from "../errors/index.js";
+import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 
 const register = async (req, res) => {
   const {
@@ -33,11 +33,11 @@ const register = async (req, res) => {
     !mobile ||
     !city
   ) {
-    throw new BedRequestError("please provide all values");
+    throw new BadRequestError("please provide all values");
   }
   const userAlreadyExists = await User.findOne({ email });
   if (userAlreadyExists) {
-    throw new BedRequestError("Email already in use");
+    throw new BadRequestError("Email already in use");
   }
   const user = await User.create({
     name,
@@ -77,13 +77,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new BedRequestError("Please provide all values");
+    throw new BadRequestError("Please provide all values");
   }
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
     throw new UnAuthenticatedError("Invalid Credentials");
   }
-  const isPasswordCorrect = await user.comparePassword(password);
+  const isPasswordCorrect = await user?.comparePassword(password);
   if (!isPasswordCorrect) {
     throw new UnAuthenticatedError("Invalid Credentials");
   }

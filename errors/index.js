@@ -1,5 +1,5 @@
-import BedRequestError from "./bed-request.js";
+import BadRequestError from "./bad-request.js";
 import NotFoundError from "./not-found.js";
 import UnAuthenticatedError from "./unauthenticated.js";
 
-export { BedRequestError, NotFoundError, UnAuthenticatedError };
+export { BadRequestError, NotFoundError, UnAuthenticatedError };
